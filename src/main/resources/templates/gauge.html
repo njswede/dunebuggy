@@ -1,0 +1,17 @@
+<script src="../rgraph/RGraph.common.core.js"></script>
+<script src="../rgraph/RGraph.gauge.js"></script>
+<canvas id="cvs" width="250" height="250">[No canvas support]</canvas>
+<script th:inline="javascript">
+/*<![CDATA[*/
+    var value = [[${config.value}]];
+    var min = [[${config.min}]];
+    var max = [[${config.max}]];
+    var title = [[${config.label}]];
+    var unit = [[${config.unit}]];
+    var redStart = [[${config.redStart}]];
+    var greenEnd = [[${config.greenEnd}]]
+    var gauge = new RGraph.Gauge({id: 'cvs', min: min, max: max, value: value, 
+    	options: { redStart: redStart, greenEnd: greenEnd, titleTop: title, titleBottom: unit }});
+    gauge.Draw();
+/*]]>*/
+</script>
