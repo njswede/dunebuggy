@@ -1,4 +1,4 @@
-package com.vmware.samples.vrops.rgraph;
+package net.virtualviking.dunesbuggy;
 
 public class Sample {
 	private long timestamp;

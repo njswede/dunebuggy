@@ -1,4 +1,4 @@
-package com.vmware.samples.vrops.rgraph.config;
+package net.virtualviking.dunesbuggy.config;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

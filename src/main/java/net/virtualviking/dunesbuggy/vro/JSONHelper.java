@@ -1,4 +1,4 @@
-package com.vmware.samples.vrops.rgraph.vrops;
+package net.virtualviking.dunesbuggy.vro;
 
 import java.text.DateFormat;
 import java.text.ParseException;

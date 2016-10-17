@@ -1,4 +1,4 @@
-package com.vmware.samples.vrops.rgraph.vrops;
+package net.virtualviking.dunesbuggy.vro;
 
 import java.io.IOException;
 import java.net.URI;
@@ -7,6 +7,8 @@ import java.nio.charset.Charset;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -28,26 +30,36 @@ import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContextBuilder;
+import org.apache.http.ssl.TrustStrategy;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vmware.samples.vrops.rgraph.Sample;
 
-public class VropsClient {
+import net.virtualviking.dunesbuggy.Sample;
+
+public class VroClient {
 	private HttpClient http;
 	private HttpHost vraHost;
 	
-	private static Log log = LogFactory.getLog(VropsClient.class);
+	private static Log log = LogFactory.getLog(VroClient.class);
 	private String token;
 	private long tokenExpiration;
 	
 	private static long expirationTolerance = 120000;
 	
-	public VropsClient(String url, String username, String password, boolean trustSelfSigned) throws ClientProtocolException, IOException, URISyntaxException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException, HttpException {
+	public VroClient(String url, String username, String password, boolean trustSelfSigned, boolean trustInvalid) throws ClientProtocolException, IOException, URISyntaxException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException, HttpException {
 		if(trustSelfSigned) {
 			SSLContextBuilder sslBld = new SSLContextBuilder();
-			sslBld.loadTrustMaterial(null, new TrustSelfSignedStrategy());
+			if(trustInvalid)
+				sslBld.loadTrustMaterial(null, new TrustStrategy() {
+					@Override
+					public boolean isTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
+						return true;
+					}
+				});
+			else
+				sslBld.loadTrustMaterial(null, new TrustSelfSignedStrategy());
 			http = HttpClients.custom().
 					setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE).
 					setSSLSocketFactory(new SSLConnectionSocketFactory(sslBld.build(), NoopHostnameVerifier.INSTANCE)).build();
@@ -141,32 +153,6 @@ public class VropsClient {
 			return response;
 		log.debug("Error response from server: " + IOUtils.toString(response.getEntity().getContent(), Charset.defaultCharset()));
 		throw new HttpException("HTTP Error: " + response.getStatusLine().getStatusCode() + " Reason: " + response.getStatusLine().getReasonPhrase());
-	}
-	
-	public String getResourceIdByName(String resourceKind, String name) throws ClientProtocolException, IOException, HttpException {
-		Map<String, Object> data = this.get("/suite-api/api/resources?resourceKind=" + resourceKind + "&name=" + name);
-		Collection<Map<String, Object>> resourceList = JSONHelper.getListOfComplex(data, "resourceList");
-		for(Map<String, Object> resource : resourceList) {
-			if(JSONHelper.getObject(resource, "resourceKey.name").equals(name)) 
-				return (String) resource.get("identifier");
-		}
-		return null;
-	}
-	
-	public Sample getLatestStatById(String id, String statKey) throws ClientProtocolException, IOException, HttpException {
-		Map<String, Object> data = this.get("/suite-api/api/resources/" + id + "/stats/latest?statKey=" + statKey);
-		Map<String, Object> value = JSONHelper.getIndexedComplex(data, "values", 0);
-		if(value == null)
-			return null;
-		Map<String, Object> stat = JSONHelper.getIndexedComplex(value, "stat-list.stat", 0);
-		if(stat == null)
-			return null;
-		return new Sample((Long) JSONHelper.getIndexed(stat, "timestamps", 0), 
-				(Double) JSONHelper.getIndexed(stat, "data", 0));
-	}
-	
-	public Sample getLatestStatByName(String resourceKind, String resourceName, String statKey) throws ClientProtocolException, IOException, HttpException {
-		return this.getLatestStatById(this.getResourceIdByName(resourceKind, resourceName), statKey);
 	}
 	
 	@SuppressWarnings("unchecked")

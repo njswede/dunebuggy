@@ -1,4 +1,4 @@
-package com.vmware.samples.vrops.rgraph.config;
+package net.virtualviking.dunesbuggy.config;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
-import com.vmware.samples.vrops.rgraph.vrops.VropsClient;
+import net.virtualviking.dunesbuggy.vro.VroClient;
 
 @Configuration
 public class VropsConfig {
@@ -28,7 +28,7 @@ public class VropsConfig {
 	
 	@Bean
 	@Scope("singleton")
-	VropsClient vropsClient() throws KeyManagementException, ClientProtocolException, NoSuchAlgorithmException, KeyStoreException, IOException, URISyntaxException, HttpException {
-		return new VropsClient(vropsUrl, vropsUser, vropsPassword, true);
+	VroClient vropsClient() throws KeyManagementException, ClientProtocolException, NoSuchAlgorithmException, KeyStoreException, IOException, URISyntaxException, HttpException {
+		return new VroClient(vropsUrl, vropsUser, vropsPassword, true, true);
 	}
 }
