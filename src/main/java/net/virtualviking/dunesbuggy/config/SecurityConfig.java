@@ -9,6 +9,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+import net.virtualviking.dunesbyggy.security.VroAuthenticationProvider;
+
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 @Configuration
@@ -16,10 +18,33 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private static Log log = LogFactory.getLog(SecurityConfig.class);
 	
+	@Value("${vro.url}")
+	private String vroUrl;
+	
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/**").permitAll();
-        http.headers().frameOptions().sameOrigin().frameOptions().disable();
+    	// We require authentication for all pages except some static content.
+    	//
+        http
+            .authorizeRequests()
+                .antMatchers("/login", "/css/**", "/images/**", "/js/**", "/webjars/**").permitAll()
+                .anyRequest().authenticated()
+                .and()
+            .formLogin()
+                .loginPage("/login")
+                .permitAll()
+            .and()
+            	.httpBasic()
+            .and()
+            	.logout().permitAll()
+        	.and()
+        		.csrf().ignoringAntMatchers("/events/**");
     }
     
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(new VroAuthenticationProvider(vroUrl));
+        log.info("Authentication initialized for URL " + vroUrl);
+        
+    }
 }

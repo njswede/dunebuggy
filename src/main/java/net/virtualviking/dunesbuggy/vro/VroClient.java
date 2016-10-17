@@ -9,6 +9,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -18,8 +19,12 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpException;
+import org.apache.http.HttpHeaders;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.Credentials;
+import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -43,12 +48,17 @@ public class VroClient {
 	private HttpHost vraHost;
 	
 	private static Log log = LogFactory.getLog(VroClient.class);
-	private String token;
+	private String username;
+	private String password;
 	private long tokenExpiration;
 	
 	private static long expirationTolerance = 120000;
 	
-	public VroClient(String url, String username, String password, boolean trustSelfSigned, boolean trustInvalid) throws ClientProtocolException, IOException, URISyntaxException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException, HttpException {
+	public void VroClient() {
+	}
+	
+	public void authenticate(String url, String username, String password, boolean trustSelfSigned, boolean trustInvalid) throws ClientProtocolException, IOException, URISyntaxException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException, HttpException {
+
 		if(trustSelfSigned) {
 			SSLContextBuilder sslBld = new SSLContextBuilder();
 			if(trustInvalid)
@@ -68,17 +78,14 @@ public class VroClient {
 			http = HttpClients.createDefault();
 		URI uri = new URI(url);
 		vraHost = new HttpHost(uri.getHost(), uri.getPort(), uri.getScheme());
-		Map<String, String> login = new HashMap<String, String>();
-		login.put("username", username);
-		login.put("password", password);
-		Map<String, Object> auth = this.post("/suite-api/api/auth/token/acquire", JSONHelper.encode(login));
-		token = "vRealizeOpsToken " + auth.get("token");
-		tokenExpiration = (Long) auth.get("validity");
+		this.username = username;
+		this.password = password;
+		this.get("/vco/api/plugins");
 		log.info("Successfully authenticated " + username + ". Session expires: " + tokenExpiration);
 	}
 	
 	public String getAuthToken() {
-		return token;
+		return null;
 	}
 	
 	public boolean isExpired() {
@@ -96,12 +103,7 @@ public class VroClient {
 	public String postReturnString(String uri, String jsonContent) throws ClientProtocolException, IOException, HttpException {
 		HttpPost post = new HttpPost(uri);
 		try {
-			StringEntity payload = new StringEntity(jsonContent);
-			payload.setContentType("application/json");
-			post.setEntity(payload);
-			post.setHeader("Accept", "application/json");
-			if(token != null)
-				post.setHeader("Authorization", token);
+			post.setHeader(HttpHeaders.AUTHORIZATION, this.getAuthHeader());
 			log.debug("POST " + uri);
 			return IOUtils.toString(this.checkResponse(http.execute(vraHost, post)).getEntity().getContent(), Charset.defaultCharset());
 		} finally {
@@ -123,8 +125,7 @@ public class VroClient {
 	public String getString(String uri) throws UnsupportedOperationException, ClientProtocolException, IOException, HttpException {
 		HttpGet get = new HttpGet(sanitizeURL(uri));
 		try {
-			if(token != null)
-				get.setHeader("Authorization", token);
+			get.setHeader("Authorization", this.getAuthHeader());
 			get.setHeader("Accept", "application/json");
 			log.debug("GET " + uri);
 			return IOUtils.toString(this.checkResponse(http.execute(vraHost, get)).getEntity().getContent(), Charset.defaultCharset());
@@ -136,8 +137,7 @@ public class VroClient {
 	public byte[] getBinary(String uri, String contentType) throws UnsupportedOperationException, ClientProtocolException, IOException, HttpException {
 		HttpGet get = new HttpGet(sanitizeURL(uri));
 		try {
-			if(token != null)
-				get.setHeader("Authorization", token);
+			get.setHeader("Authorization", this.getAuthHeader());
 			get.setHeader("Accept", contentType);
 			log.debug("GET " + uri);
 			return IOUtils.toByteArray(this.checkResponse(http.execute(vraHost, get)).getEntity().getContent());
@@ -167,5 +167,11 @@ public class VroClient {
 		// The HTTP client doesn't like pipe characters in URLs.
 		//
 		return url.replace("|", "%7c");
+	}
+	
+	private String getAuthHeader() {
+		String auth = username + ":" + password;
+		byte[] encodedAuth = Base64.getEncoder().encode(auth.getBytes(Charset.forName("ISO-8859-1")));
+		return "Basic " + new String(encodedAuth);
 	}
 }

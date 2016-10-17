@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <meta charset="UTF-8">
+    <title>VMWare Hackathon - Poor Man's Self Service</title>    
+	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+  </head>
+<body>  
+
+
+<button id="ajaxconnect">Connect to REST API</button>
+<button id="ajaxversion">Get VRo version</button>
+<button id="ajaxworkflows">List all workflows</button>
+<button id="ajaxuserinfo">Get user info</button>
+<button id="ajaxtest">Test Button</button>
+
+<div id='result'>
+</div>
+
+<script type="text/javascript">
+	var creds = btoa("administrator@vsphere.local:Nostalgi-e1");
+    $('#ajaxworkflows').click(function(){ 
+         $.ajax({ 
+         type: "GET",
+         dataType: "json",
+         url: "https://192.168.88.11:8281/vco/api/workflows/",
+		 beforeSend : function(xhr) {
+			 xhr.setRequestHeader("Authorization", "Basic " + creds);
+		 },
+		 success: function(data){ 
+               document.getElementById('result').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+	     },
+	     error: function(jqXHR){
+		document.getElementById('result').innerHTML = JSON.stringify(jqXHR);	
+	     }
+         });
+    });
+
+    $('#ajaxtest').click(function(){ 
+         $.ajax({ 
+         type: "GET",
+         dataType: "json",
+         url: "https://192.168.88.11:8281/vco/api/workflows/BD808080808080808080808080808080A3C280800122528313869552e41805bb1/",
+		 beforeSend : function(xhr) {
+			 xhr.setRequestHeader("Authorization", "Basic " + creds);
+		 },
+		 success: function(data){ 
+               document.getElementById('result').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+	     },
+	     error: function(jqXHR){
+		document.getElementById('result').innerHTML = JSON.stringify(jqXHR);	
+	     }
+         });
+    });
+
+
+    $('#ajaxuserinfo').click(function(){ 
+         $.ajax({ 
+         type: "GET",
+         dataType: "json",
+         url: "https://192.168.88.11:8281/vco/api/users/",
+		 beforeSend : function(xhr) {
+			 xhr.setRequestHeader("Authorization", "Basic " + creds);
+		 },
+		 success: function(data){ 
+               document.getElementById('result').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+	     },
+	     error: function(jqXHR){
+		document.getElementById('result').innerHTML = JSON.stringify(jqXHR);	
+	     }
+         });
+    });	
+	
+    $('#ajaxconnect').click(function(){ 
+         $.ajax({ 
+         type: "GET",
+         dataType: "json",
+         url: "https://192.168.88.11:8281/vco/api/",
+		 beforeSend : function(xhr) {
+			 xhr.setRequestHeader("Authorization", "Basic " + creds);
+		 },
+		 success: function(data){ 
+               document.getElementById('result').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+	     },
+	     error: function(jqXHR){
+		document.getElementById('result').innerHTML = JSON.stringify(jqXHR);	
+	     }
+         });
+    });
+
+    $('#ajaxversion').click(function(){ 
+         $.ajax({ 
+         type: "GET",
+         dataType: "json",
+         url: "https://192.168.88.11:8281/vco/api/about",
+		 beforeSend : function(xhr) {
+			 xhr.setRequestHeader("Authorization", "Basic " + creds);
+		 },
+		 success: function(data){ 
+               document.getElementById('result').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+	     },
+	     error: function(jqXHR){
+		document.getElementById('result').innerHTML = JSON.stringify(jqXHR);	
+	     }
+         });
+    });
+
+</script>
+
+
+</body>
+</html>
+
+

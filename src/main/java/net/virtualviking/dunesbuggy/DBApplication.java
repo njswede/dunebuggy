@@ -7,10 +7,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 
 @SpringBootApplication
-public class RgraphApplication {
+public class DBApplication {
 
     public static void main(String[] args) {
     	System.setProperty("jsse.enableSNIExtension", "false");
-        ApplicationContext ctx = SpringApplication.run(RgraphApplication.class, args);
+        ApplicationContext ctx = SpringApplication.run(DBApplication.class, args);
     }
 }
