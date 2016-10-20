@@ -63,6 +63,10 @@ public class JSONHelper {
 		return json;
 	}
 	
+	public static String getString(Map<String, Object> data, String name) {
+		return (String) getObject(data, name);
+	}
+	
 	public static String encode(Object o) throws JsonProcessingException {
 		return new ObjectMapper().writeValueAsString(o);
 	}

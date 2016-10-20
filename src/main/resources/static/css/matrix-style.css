@@ -94,7 +94,7 @@ hr{ border-top-color:#dadada;}
 /* Top user navigation */
 #user-nav {
 	position: absolute;
-	left: 220px;
+	left: 400px;
 	top:0px;
 	z-index: 20;
 	margin: 0;
@@ -142,7 +142,7 @@ hr{ border-top-color:#dadada;}
 	display: block;
 	float: left;
 	position: relative;
-	width: 220px;
+	width: 400px;
 	z-index: 16;
 }
 #sidebar > ul {
@@ -150,7 +150,7 @@ hr{ border-top-color:#dadada;}
 	margin: 0px 0 0;
 	padding: 0;
 	position: absolute;
-	width: 220px;
+	width: 400px;
 }
 #sidebar > ul > li {
 	display: block;
@@ -195,7 +195,7 @@ hr{ border-top-color:#dadada;}
 /* Content */
 #content {
 	background: none repeat scroll 0 0 #eeeeee;
-	margin-left: 220px;
+	margin-left: 400px;
 	margin-right: 0;
 	padding-bottom: 25px;
 	position: relative;

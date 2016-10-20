@@ -4,27 +4,31 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>VMWare Hackathon - Poor Man's Self Service - Dashboard</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/bootstrap-responsive.min.css" />
+    <link rel="stylesheet" href="webjars/bootstrap/3.3.4/css/bootstrap.min.css" />
+    <!-- link rel="stylesheet" href="webjars/bootstrap/3.3.4/css/bootstrap-responsive.min.css" / -->
     <link rel="stylesheet" href="css/matrix-style.css" />
     <link rel="stylesheet" href="css/matrix-media.css" />
     <link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
     <link rel="stylesheet" href="css/jquery.gritter.css" />
-    <script src="js/jquery-3.1.1.min.js"></script>
-    <script src="js/vro.rest.js"></script>
+    <link rel="stylesheet" href="webjars/bootstrap-treeview/1.2.0/bootstrap-treeview.min.css" />
+    <link rel="stylesheet" href="css/dunesbuggy.css" />
+    <!--  script src="js/jquery-3.1.1.min.js"></script -->
+	<script src="webjars/jquery/3.1.1/jquery.min.js"/>  
+	<script src="webjars/bootstrap/3.3.4/js/bootstrap.min.js"/>  
+    <script src="webjars/bootstrap-treeview/1.2.0/bootstrap-treeview.min.js"/>
   </head>
 
   <body>
     <!--Header-part-->
     <div id="header">
-      <h1><a href="dashboard.html">vRo Self Service</a></h1>
+      <h1><a class="" href="dashboard.html">vRo Self Service</a></h1>
     </div>
     <!--close-Header-part--> 
 
     <!--top-Header-menu-->
     <div id="user-nav" class="navbar navbar-inverse">
       <ul class="nav">
-        <li  class="dropdown" id="profile-messages" ><a title="" href="#" data-toggle="dropdown" data-target="#profile-messages" class="dropdown-toggle"><i class="icon icon-user"></i>  <span class="text">Welcome Administrator@vsphere.local</span><b class="caret"></b></a>
+        <li  class="dropdown" id="profile-messages" ><a title="" href="#" data-toggle="dropdown" data-target="#profile-messages" class="dropdown-toggle"><i class="icon icon-user"></i>  <span class="text" th:text="${backend.user}">Welcome Administrator@vsphere.local</span><b class="caret"></b></a>
           <ul class="dropdown-menu">
             <li><a href="#"><i class="icon-user"></i> My Profile</a></li>
             <li class="divider"></li>
@@ -39,11 +43,8 @@
     <!--close-top-Header-menu-->
 
     <!--left-sidebar-menu-->
-    <div id="sidebar"><a href="#" class="visible-phone"><i class="icon icon-home"></i> Workflows</a>
-      <ul>
-        <li class="active"><a href="dashboard.html"><i class="icon icon-home"></i> <span>Workflows</span></a> </li>
-        <li> <a href="workflows.html"><i class="icon icon-signal"></i> <span>Other cool stuff</span></a> </li>
-      </ul>
+    <div id="sidebar" class="left-sidebar">
+      	<div id="catalog-tree"/>
     </div>
     <!--end-left-sidebar-menu-->
 
@@ -53,63 +54,26 @@
           <div id="content-header">
             <div id="breadcrumb"> <a href="dashboard.html" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Workflows</a></div>
           </div>
-		<!-- div class="widget-box">
-          <div class="widget-content nopadding">
-			  <div class="widget-title"> <span class="icon"> <i class="icon-th"></i> </span>
-				<h5>"Trap Host Management</h5>
-			  </div>
-			  <div class="widget-content nopadding">
-				<table class="table table-bordered table-striped">
-				  <thead>
-					<tr>
-					  <th>Workflow</th>
-					  <th>Version</th>
-					  <th>Actions</th>
-					</tr>
-				  </thead>
-				  <tbody>
-					<tr class="odd gradeX">
-					  <td>Set the SNMP trap port</td>
-					  <td>0.0.7</td>
-					  <td><button id="restlaunch1"><i class="icon icon-share-alt"></i> Launch</button></td>
-					</tr>
-					<tr class="even gradeC">
-					  <td>Start the trap host</td>
-					  <td>0.0.5</td>
-					  <td><button id="restlaunch2"><i class="icon icon-share-alt"></i> Launch</button></td>
-					</tr>
-					<tr class="even gradeC">
-					  <td>Stop the trap host</td>
-					  <td>0.0.5</td>
-					  <td><button id="restlaunch3"><i class="icon icon-share-alt"></i> Launch</button></td>
-					</tr>
-				  </tbody>
-				</table>
-			  </div>
-		 </div>
-		</div -->
 		<div class="widget-box">
           <div class="widget-content nopadding">
 			  <div class="widget-title"> <span class="icon"> <i class="icon-th"></i> </span>
 				<h5>"Device Management</h5>
 			  </div>
 			  <div class="widget-content nopadding">
-				<table class="table table-bordered table-striped">
+				<table class="table table-bordered table-striped" id="catalog">
 				  <thead>
 					<tr>
 					  <th>Workflow</th>
-					  <th>Version</th>
 					  <th>Actions</th>
 					</tr>
 				  </thead>
 				  <tbody>
-				  <th:block th:each="workflow: ${workflows}">
-					<tr class="odd gradeX">
-					  <td th:text="${workflow.name}">Add disk</td>
-					  <td th:text="${workflow.version}">Add disk</td>
-					  <td><button id="restlaunch4"><i class="icon icon-share-alt"></i> Launch</button></td>
+				  <!-- th:block th:each="item: ${catalog}">
+					<tr class="odd gradeX" th:attr="data-tt-id=${item.id},data-tt-parent-id=${item.parentId}">
+					  <td class="folder" th:text="${item.name}"></td>
+					  <td><button th:if="${not item.isFolder}" id="restlaunch4"><i class="icon icon-share-alt"></i> Launch</button></td>
 					</tr>
-				</th:block>
+				</th:block -->
 				  </tbody>
 				</table>
 			  </div>
@@ -126,152 +90,28 @@
     </div>
     <!--end-Footer-part-->
     
+    <script>
+    // Load tree view
+    $.ajax({
+    		datatype: "json",
+    		url: "rest/catalogtree",
+    		method: "GET",
+    		success: function(data) {
+				console.log("Got tree data: " + data);
+    			$('#catalog-tree').treeview({
+					data: [ data ],
+					expandIcon: "glyphicon glyphicon-folder-open",
+					collapseIcon: "glyphicon glyphicon-folder-close",
+					//nodeIcon: "glyphicon glyphicon-file"
+					 });
+    		}
+    });
+   
+    </script>
+    
     
       <div id="result"></div>
-    <script src="js/dashboard.js"></script>
-    <script src="js/excanvas.min.js"></script> 
-    <script src="js/jquery.min.js"></script> 
-    <script src="js/jquery.ui.custom.js"></script> 
-    <script src="js/bootstrap.min.js"></script> 
-    <script src="js/jquery.flot.min.js"></script> 
-    <script src="js/jquery.flot.resize.min.js"></script> 
-    <script src="js/jquery.peity.min.js"></script> 
-    <script src="js/matrix.js"></script> 
-    <script src="js/matrix.dashboard.js"></script> 
-    <script src="js/jquery.gritter.min.js"></script> 
-    <script src="js/matrix.interface.js"></script> 
-    <script src="js/matrix.chat.js"></script> 
-    <script src="js/jquery.validate.js"></script> 
-    <script src="js/matrix.form_validation.js"></script> 
-    <script src="js/jquery.wizard.js"></script> 
-    <script src="js/jquery.uniform.js"></script> 
-    <script src="js/select2.min.js"></script> 
-    <script src="js/matrix.popover.js"></script> 
-    <script src="js/jquery.dataTables.min.js"></script> 
-    <script src="js/matrix.tables.js"></script> 
-  
-    <script type="text/javascript">
-    // This function is called from the pop-up menus to transfer to
-    // a different page. Ignore if the value returned is a null string:
-    function goPage (newURL) {
 
-        // if url is empty, skip the menu dividers and reset the menu selection to default
-        if (newURL != "") {
-
-            // if url is "-", it is this page -- reset the menu:
-            if (newURL == "-" ) {
-                resetMenu();            
-            } 
-            // else, send page to designated URL            
-            else {  
-              document.location.href = newURL;
-            }
-        }
-    }
-
-    // resets the menu selection upon entry to this page:
-    function resetMenu() {
-     document.gomenu.selector.selectedIndex = 2;
-    }
-
-	var creds = btoa("administrator@vsphere.local:Nostalgi-e1");
-    $('#restlaunch1').click(function(){ 
-         $.ajax({ 
-         type: "GET",
-         dataType: "json",
-         url: "https://192.168.88.11:8281/vco/api/catalog/System/WorkflowCategory/4028d80557c7bcd40157c7bde97c0017/",
-		 beforeSend : function(xhr) {
-			 xhr.setRequestHeader("Authorization", "Basic " + creds);
-		 },
-		 success: function(data){ 
-               document.getElementById('result').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
-	     },
-	     error: function(jqXHR){
-		document.getElementById('result').innerHTML = JSON.stringify(jqXHR);	
-	     }
-         });
-    });
-    $('#restlaunch2').click(function(){ 
-         $.ajax({ 
-         type: "GET",
-         dataType: "json",
-         url: "https://192.168.88.11:8281/vco/api/workflows/478080808080808080808080808080809880808001297259131125b940b51f82d/",
-		 beforeSend : function(xhr) {
-			 xhr.setRequestHeader("Authorization", "Basic " + creds);
-		 },
-		 success: function(data){ 
-               document.getElementById('result').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
-	     },
-	     error: function(jqXHR){
-		document.getElementById('result').innerHTML = JSON.stringify(jqXHR);	
-	     }
-         });
-    });
-    $('#restlaunch3').click(function(){ 
-         $.ajax({ 
-         type: "GET",
-         dataType: "json",
-         url: "https://192.168.88.11:8281/vco/api/workflows/478080808080808080808080808080809E80808001297259131125b940b51f82d/",
-		 beforeSend : function(xhr) {
-			 xhr.setRequestHeader("Authorization", "Basic " + creds);
-		 },
-		 success: function(data){ 
-               document.getElementById('result').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
-	     },
-	     error: function(jqXHR){
-		document.getElementById('result').innerHTML = JSON.stringify(jqXHR);	
-	     }
-         });
-    });
-    $('#restlaunch4').click(function(){ 
-         $.ajax({ 
-         type: "GET",
-         dataType: "json",
-         url: "https://192.168.88.11:8281/vco/api/workflows/478080808080808080808080808080809E80808001297259131125b940b51f82d/",
-		 beforeSend : function(xhr) {
-			 xhr.setRequestHeader("Authorization", "Basic " + creds);
-		 },
-		 success: function(data){ 
-               document.getElementById('result').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
-	     },
-	     error: function(jqXHR){
-		document.getElementById('result').innerHTML = JSON.stringify(jqXHR);	
-	     }
-         });
-    });
-    $('#restlaunch5').click(function(){ 
-         $.ajax({ 
-         type: "GET",
-         dataType: "json",
-         url: "https://192.168.88.11:8281/vco/api/workflows/4E808080808080808080808080808080FA808080012233687034703cc9494706e/",
-		 beforeSend : function(xhr) {
-			 xhr.setRequestHeader("Authorization", "Basic " + creds);
-		 },
-		 success: function(data){ 
-               document.getElementById('result').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
-	     },
-	     error: function(jqXHR){
-		document.getElementById('result').innerHTML = JSON.stringify(jqXHR);	
-	     }
-         });
-    });
-    $('#restlaunch6').click(function(){ 
-         $.ajax({ 
-         type: "GET",
-         dataType: "json",
-         url: "https://192.168.88.11:8281/vco/api/workflows/f146b992-71d3-431d-872e-2b22eb3b0f78/",
-		 beforeSend : function(xhr) {
-			 xhr.setRequestHeader("Authorization", "Basic " + creds);
-		 },
-		 success: function(data){ 
-               document.getElementById('result').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
-	     },
-	     error: function(jqXHR){
-		document.getElementById('result').innerHTML = JSON.stringify(jqXHR);	
-	     }
-         });
-    });
-    </script>
 
   </body>
 </html>
