@@ -1,0 +1,55 @@
+<html>
+	<div>
+		<h1 class="page-header" th:text="${workflow.name + ' (' + workflow.version + ')'}"/>
+		<h3 th:text="${workflow.description}"/>
+	</div>
+	<div style="height: 40vh" class="panel panel-default">
+	  	<div class="panel-heading">
+			<h2 class="panel-title">Parameters</h2>
+		</div>
+		<div class="panel-body">
+			<table class="table-striped" style="width: 90%">
+				<thead>
+					<th style="width: 30%">Name</th>
+					<th style="width: 50%">Description</th>
+					<th style="width: 20%">Type</th>
+				</thead>
+				<tbody>
+					<tr th:each="parameter: ${workflow['input-parameters']}">
+						<td th:text="${parameter.name}"/>
+						<td th:text="${parameter.description}"/>
+						<td th:text="${parameter.type}"/>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div style="height: 40vh" class="panel panel-default">
+		<div class="panel-heading">
+			<h2 class="panel-title">Executions</h2>
+		</div>
+		<div class="panel-body">
+			<table class="table-striped" style="width: 90%">
+				<thead>
+					<th style="width: 10%">Status</th>
+					<th style="width: 30%">Started</th>
+					<th style="width: 30%">Finished</th>
+					<th style="width: 30%">User</th>	
+				</thead>
+				<tbody>
+					<th:block th:each="token: ${tokens.relations.link}">
+						<tr th:if="${token.rel =='down'}">
+							<td th:switch="${token.attributes.state}">
+								<span th:case="'failed'" class="glyphicon glyphicon-remove"/>
+								<span th:case="'completed'" class="glyphicon glyphicon-ok"/>		
+							</td>
+							<td th:text="${token.attributes.startDate}"/>
+							<td th:text="${token.attributes.endDate}"/>
+							<td th:text="${token.attributes.startedBy}"/>
+						</tr>
+					</th:block>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</html>

@@ -17,7 +17,7 @@ public class VROHelper {
 			if(tag.equals(attributeSection)) {
 				Map<String, Object> attrMap = new HashMap<>();
 				for(Map<String, Object> attr : (List<Map<String, Object>>) value) {
-					attrMap.put((String) attr.get("name"), (String) attr.get("value"));
+					attrMap.put((String) attr.get("name"), attr.get("value"));
 				}
 				node.setValue(attrMap);
 			}

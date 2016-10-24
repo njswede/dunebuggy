@@ -35,10 +35,11 @@ public class CatalogTreeBuilder {
 			if(!type.startsWith(objectKind))
 				continue;
 			boolean isFolder = "WorkflowCategory".equals(type);
+			String href = isFolder ? "#" : "/workflowdetails/" + JSONHelper.getString(node, "attributes.id");
 			CatalogTreeNode here = new CatalogTreeNode(
 					JSONHelper.getString(node, "attributes.name"), 
 					isFolder ? null : "glyphicon glyphicon-file", 
-					"#" + JSONHelper.getString(node, "attributes.id"), 
+					href, 
 					null, 
 					null);
 			parent.addNode(here);

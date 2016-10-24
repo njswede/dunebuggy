@@ -34,9 +34,12 @@ public class DashboardController extends AbstractController {
 	}
 	
 	@RequestMapping(value="/workflowdetails/{id}", method=RequestMethod.GET)
-	public String getWorkflowDetails(@PathVariable("id") String id) throws ClientProtocolException, IOException, HttpException {
-		Map<String, Object> data = this.getVro().get("/vco/api/workflows/" + id);
-		VROHelper.simplifyAttributes(data, "input-parameters");
+	public String getWorkflowDetails(@PathVariable("id") String id, Model model) throws ClientProtocolException, IOException, HttpException {
+		Map<String, Object> wf = this.getVro().get("/vco/api/workflows/" + id);
+		model.addAttribute("workflow", wf);
+		Map<String, Object> tokens = this.getVro().get("/vco/api/workflows/" + id + "/executions");
+		VROHelper.simplifyAttributes(tokens);
+		model.addAttribute("tokens", tokens);
 		return "workflowdetails";
 	}
 	

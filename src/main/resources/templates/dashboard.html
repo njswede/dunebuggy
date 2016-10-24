@@ -6,81 +6,43 @@
     <title>VMWare Hackathon - Poor Man's Self Service - Dashboard</title>
     <link rel="stylesheet" href="webjars/bootstrap/3.3.4/css/bootstrap.min.css" />
     <!-- link rel="stylesheet" href="webjars/bootstrap/3.3.4/css/bootstrap-responsive.min.css" / -->
-    <link rel="stylesheet" href="css/matrix-style.css" />
-    <link rel="stylesheet" href="css/matrix-media.css" />
-    <link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <!-- link rel="stylesheet" href="css/matrix-style.css" />
+    <link rel="stylesheet" href="css/matrix-media.css" / -->
     <link rel="stylesheet" href="css/jquery.gritter.css" />
     <link rel="stylesheet" href="webjars/bootstrap-treeview/1.2.0/bootstrap-treeview.min.css" />
+    <link rel="stylesheet" href="webjars/startbootstrap-sb-admin-2/1.0.8-1/css/sb-admin-2.css"/>
+    <link rel="stylesheet" href="webjars/font-awesome/4.5.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="css/dunesbuggy.css" />
     <!--  script src="js/jquery-3.1.1.min.js"></script -->
 	<script src="webjars/jquery/3.1.1/jquery.min.js"/>  
 	<script src="webjars/bootstrap/3.3.4/js/bootstrap.min.js"/>  
     <script src="webjars/bootstrap-treeview/1.2.0/bootstrap-treeview.min.js"/>
+    <script src="webjars/startbootstrap-sb-admin-2/1.0.8-1/js/sb-admin-2.js"/>
   </head>
 
-  <body>
-    <!--Header-part-->
-    <div id="header">
-      <h1><a class="" href="dashboard.html">vRo Self Service</a></h1>
-    </div>
-    <!--close-Header-part--> 
-
+  <body class="fixed-height app-bg">
+  <div id="wrapper">
+ 
     <!--top-Header-menu-->
-    <div id="user-nav" class="navbar navbar-inverse">
-      <ul class="nav">
-        <li  class="dropdown" id="profile-messages" ><a title="" href="#" data-toggle="dropdown" data-target="#profile-messages" class="dropdown-toggle"><i class="icon icon-user"></i>  <span class="text" th:text="${backend.user}">Welcome Administrator@vsphere.local</span><b class="caret"></b></a>
-          <ul class="dropdown-menu">
-            <li><a href="#"><i class="icon-user"></i> My Profile</a></li>
-            <li class="divider"></li>
-            <li><a href="#"><i class="icon-check"></i> My Tasks</a></li>
-            <li class="divider"></li>
-            <li><a href="index.html"><i class="icon-key"></i> Log Out</a></li>
-          </ul>
-        </li>
-        <li class=""><a title="" href="index.html"><i class="icon icon-share-alt"></i> <span class="text">Logout</span></a></li>
-      </ul>
-    </div>
-    <!--close-top-Header-menu-->
-
-    <!--left-sidebar-menu-->
-    <div id="sidebar" class="left-sidebar">
-      	<div id="catalog-tree"/>
-    </div>
-    <!--end-left-sidebar-menu-->
+    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+      <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">vRealize Automation Client (Experimental)</a>
+            </div>
+      
+      <div class="navbar-default sidebar" role="navigation">
+      	<div class="scrollable-list" id="catalog-tree"/>
+      </div>
+    </nav>
 
     <!--main-container-part-->
-    <div id="content">
-        <!--breadcrumbs-->
-          <div id="content-header">
-            <div id="breadcrumb"> <a href="dashboard.html" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Workflows</a></div>
-          </div>
-		<div class="widget-box">
-          <div class="widget-content nopadding">
-			  <div class="widget-title"> <span class="icon"> <i class="icon-th"></i> </span>
-				<h5>"Device Management</h5>
-			  </div>
-			  <div class="widget-content nopadding">
-				<table class="table table-bordered table-striped" id="catalog">
-				  <thead>
-					<tr>
-					  <th>Workflow</th>
-					  <th>Actions</th>
-					</tr>
-				  </thead>
-				  <tbody>
-				  <!-- th:block th:each="item: ${catalog}">
-					<tr class="odd gradeX" th:attr="data-tt-id=${item.id},data-tt-parent-id=${item.parentId}">
-					  <td class="folder" th:text="${item.name}"></td>
-					  <td><button th:if="${not item.isFolder}" id="restlaunch4"><i class="icon icon-share-alt"></i> Launch</button></td>
-					</tr>
-				</th:block -->
-				  </tbody>
-				</table>
-			  </div>
-		 </div>
-		<div id="result"></div>
-		</div>
-        <!--End-breadcrumbs-->
+    <div id="page-wrapper" class="main-panel">
+    	<div id="content" class="scrollable-list"/>
 	</div>
     <!--end-main-container-part-->
     
@@ -91,7 +53,12 @@
     <!--end-Footer-part-->
     
     <script>
+// <![CDATA[
     // Load tree view
+    function selectWorkflow(event, node) {
+    	if(node.href != null && node.href != "" && node.href != "#")
+    		$("#content").load(node.href);
+    }
     $.ajax({
     		datatype: "json",
     		url: "rest/catalogtree",
@@ -102,15 +69,17 @@
 					data: [ data ],
 					expandIcon: "glyphicon glyphicon-folder-open",
 					collapseIcon: "glyphicon glyphicon-folder-close",
-					//nodeIcon: "glyphicon glyphicon-file"
+					onNodeSelected: selectWorkflow
 					 });
     		}
     });
-   
+// ]]>
     </script>
     
     
       <div id="result"></div>
+      
+      </div>
 
 
   </body>
