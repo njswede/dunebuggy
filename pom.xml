@@ -139,12 +139,12 @@
 				<artifactId>docker-maven-plugin</artifactId>
 				<version>0.4.13</version>
 				<configuration>
-					<imageName>vrops-rgraph</imageName>
+					<imageName>dunebuggy</imageName>
 					<baseImage>openjdk</baseImage>
-					<entryPoint>["/bin/sh", "/opt/vrops-rgraph/run-vrops-rgraph.sh"]</entryPoint>
+					<entryPoint>["/bin/sh", "/opt/vrops-rgraph/run-dunebuggy.sh"]</entryPoint>
 					<resources>
 						<resource>
-							<targetPath>/opt/vrops-rgraph</targetPath>
+							<targetPath>/opt/dunebuggy</targetPath>
 							<directory>${project.build.directory}</directory>
 							<include>${project.build.finalName}.jar</include>
 						</resource>

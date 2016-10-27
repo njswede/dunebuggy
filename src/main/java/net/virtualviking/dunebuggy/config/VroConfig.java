@@ -1,0 +1,25 @@
+package net.virtualviking.dunebuggy.config;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+
+import org.apache.http.HttpException;
+import org.apache.http.client.ClientProtocolException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+
+import net.virtualviking.dunebuggy.vro.VroClient;
+
+@Configuration
+public class VroConfig {	
+	@Bean
+	@Scope("session")
+	VroClient vroClient() {
+		return new VroClient();
+	}
+}
