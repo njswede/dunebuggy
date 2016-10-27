@@ -101,9 +101,14 @@ public class VroClient {
 	}
 	
 	public String postReturnString(String uri, String jsonContent) throws ClientProtocolException, IOException, HttpException {
+		log.debug("Payload: " + jsonContent);
 		HttpPost post = new HttpPost(uri);
 		try {
 			post.setHeader(HttpHeaders.AUTHORIZATION, this.getAuthHeader());
+			post.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
+			post.setHeader(HttpHeaders.ACCEPT, "application/json");
+			StringEntity payload = new StringEntity(jsonContent);
+			post.setEntity(payload);
 			log.debug("POST " + uri);
 			return IOUtils.toString(this.checkResponse(http.execute(vraHost, post)).getEntity().getContent(), Charset.defaultCharset());
 		} finally {
@@ -149,7 +154,7 @@ public class VroClient {
 	private HttpResponse checkResponse(HttpResponse response) throws HttpException, UnsupportedOperationException, IOException {
 		int status = response.getStatusLine().getStatusCode();
 		log.debug("HTTP status: " + status);
-		if(status == 200 || status == 201)
+		if(status == 200 || status == 201 || status == 202)
 			return response;
 		log.debug("Error response from server: " + IOUtils.toString(response.getEntity().getContent(), Charset.defaultCharset()));
 		throw new HttpException("HTTP Error: " + response.getStatusLine().getStatusCode() + " Reason: " + response.getStatusLine().getReasonPhrase());

@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.Map;
 
 public class VROHelper {
-	public static void simplifyAttributes(Map<String, Object> response) {
-		simplifyAttributes(response, "attributes");
+	public static Map<String, Object> simplifyAttributes(Map<String, Object> response) {
+		return simplifyAttributes(response, "attributes");
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static void simplifyAttributes(Map<String, Object> response, String attributeSection) {
+	public static Map<String, Object> simplifyAttributes(Map<String, Object> response, String attributeSection) {
 		for(Map.Entry<String, Object> node : response.entrySet()) {
 			String tag = node.getKey();
 			Object value = node.getValue();
@@ -29,11 +29,13 @@ public class VROHelper {
 					simplifyAttributes((Map<String, Object>) value);
 			}
 		}
+		return response;
 	}
 	
-	public static void simplifyAttributes(List<Map<String, Object>> response) {
+	public static List<Map<String, Object>> simplifyAttributes(List<Map<String, Object>> response) {
 		for(Map<String, Object> node : response) {
 			simplifyAttributes(node);
 		}
+		return response;
 	}
 }

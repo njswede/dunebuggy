@@ -11,12 +11,14 @@
 
 .main-panel {
 	margin-left: 510px;
+	height: 95vh;
 }
 
 .scrollable-list {
-	height: 100vh;
+	max-height: 95vh;
 	overflow-y: scroll;
 }
 
-.fixed-y {
+.no-wrap {
+	white-space: nowrap;
 }

@@ -1,58 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>VMWare Hackathon - Poor Man's Self Service - Dashboard</title>
-    <link rel="stylesheet" href="webjars/bootstrap/3.3.4/css/bootstrap.min.css" />
-    <!-- link rel="stylesheet" href="webjars/bootstrap/3.3.4/css/bootstrap-responsive.min.css" / -->
-    <!-- link rel="stylesheet" href="css/matrix-style.css" />
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VMWare Hackathon - Poor Man's Self Service - Dashboard</title>
+<link rel="stylesheet"
+	href="webjars/bootstrap/3.3.4/css/bootstrap.min.css" />
+<!-- link rel="stylesheet" href="webjars/bootstrap/3.3.4/css/bootstrap-responsive.min.css" / -->
+<!-- link rel="stylesheet" href="css/matrix-style.css" />
     <link rel="stylesheet" href="css/matrix-media.css" / -->
-    <link rel="stylesheet" href="css/jquery.gritter.css" />
-    <link rel="stylesheet" href="webjars/bootstrap-treeview/1.2.0/bootstrap-treeview.min.css" />
-    <link rel="stylesheet" href="webjars/startbootstrap-sb-admin-2/1.0.8-1/css/sb-admin-2.css"/>
-    <link rel="stylesheet" href="webjars/font-awesome/4.5.0/css/font-awesome.min.css"/>
-    <link rel="stylesheet" href="css/dunesbuggy.css" />
-    <!--  script src="js/jquery-3.1.1.min.js"></script -->
-	<script src="webjars/jquery/3.1.1/jquery.min.js"/>  
-	<script src="webjars/bootstrap/3.3.4/js/bootstrap.min.js"/>  
-    <script src="webjars/bootstrap-treeview/1.2.0/bootstrap-treeview.min.js"/>
-    <script src="webjars/startbootstrap-sb-admin-2/1.0.8-1/js/sb-admin-2.js"/>
-  </head>
+<link rel="stylesheet" href="css/jquery.gritter.css" />
+<link rel="stylesheet"
+	href="webjars/bootstrap-treeview/1.2.0/bootstrap-treeview.min.css" />
+<link rel="stylesheet"
+	href="webjars/startbootstrap-sb-admin-2/1.0.8-1/css/sb-admin-2.css" />
+<link rel="stylesheet"
+	href="webjars/font-awesome/4.5.0/css/font-awesome.min.css" />
+<link rel="stylesheet" href="webjars/datatables/1.10.12/css/jquery.dataTables.min.css"/>
+<link rel="stylesheet" href="css/dunesbuggy.css" />
+<!--  script src="js/jquery-3.1.1.min.js"></script -->
+<script src="webjars/jquery/3.1.1/jquery.min.js" />
+<script src="webjars/bootstrap/3.3.4/js/bootstrap.min.js" />
+<script src="webjars/bootstrap-treeview/1.2.0/bootstrap-treeview.min.js" />
+<script src="webjars/startbootstrap-sb-admin-2/1.0.8-1/js/sb-admin-2.js" />
+<script src="webjars/datatables/1.10.12/js/jquery.dataTables.min.js"/>
+</head>
 
-  <body class="fixed-height app-bg">
-  <div id="wrapper">
- 
-    <!--top-Header-menu-->
-    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-      <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="index.html">vRealize Automation Client (Experimental)</a>
-            </div>
-      
-      <div class="navbar-default sidebar" role="navigation">
-      	<div class="scrollable-list" id="catalog-tree"/>
-      </div>
-    </nav>
+<body class="fixed-height app-bg">
+	<div id="wrapper">
 
-    <!--main-container-part-->
-    <div id="page-wrapper" class="main-panel">
-    	<div id="content" class="scrollable-list"/>
-	</div>
-    <!--end-main-container-part-->
-    
-    <!--Footer-part-->
-    <div class="row-fluid">
-      <div id="footer" class="span12"> Poor Man's vRealize Orchestrator - Coded @VMware Hackathon 2016 </div>
-    </div>
-    <!--end-Footer-part-->
-    
-    <script>
+		<!--top-Header-menu-->
+		<nav class="navbar navbar-default navbar-static-top" role="navigation"
+			style="margin-bottom: 0;">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="index.html">vRealize Orchestrator Client (Experimental)</a>
+			</div>
+
+			<ul class="nav navbar-top-links navbar-right">
+				<li class="dropdown"><a class="dropdown-toggle"
+					data-toggle="dropdown" href="#"> <i class="fa fa-user fa-fw"></i>
+						<i class="fa fa-caret-down"></i>
+				</a>
+					<ul class="dropdown-menu dropdown-user">
+						<li><a href="#"><i class="fa fa-user fa-fw"></i> User
+								Profile</a></li>
+						<li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+						</li>
+						<li class="divider"></li>
+						<li><a href="login?logout"><i
+								class="fa fa-sign-out fa-fw"></i> Logout</a></li>
+					</ul></li>
+			</ul>
+			
+			<div class="navbar-default sidebar" role="navigation"
+				style="width: 500px">
+				<div class="scrollable-list no-wrap" id="catalog-tree">
+					<img src="images/spinner-big.gif" />
+				</div>
+			</div>
+		</nav>
+
+		<!--main-container-part-->
+		<div id="page-wrapper" class="main-panel" style="margin-left: 500px">
+			<div id="content" class="scrollable-list" />
+		</div>
+		<!--end-main-container-part-->
+
+		<!--Footer-part-->
+		<div class="row-fluid">
+			<div id="footer" class="span12">Poor Man's vRealize
+				Orchestrator - Coded @VMware Hackathon 2016</div>
+		</div>
+		<!--end-Footer-part-->
+
+		<script>
 // <![CDATA[
     // Load tree view
     function selectWorkflow(event, node) {
@@ -69,18 +90,19 @@
 					data: [ data ],
 					expandIcon: "glyphicon glyphicon-folder-open",
 					collapseIcon: "glyphicon glyphicon-folder-close",
-					onNodeSelected: selectWorkflow
+					onNodeSelected: selectWorkflow,
+					color: "#337ab7",
 					 });
     		}
     });
 // ]]>
     </script>
-    
-    
-      <div id="result"></div>
-      
-      </div>
 
 
-  </body>
+		<div id="result"></div>
+
+	</div>
+
+
+</body>
 </html>

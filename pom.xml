@@ -94,6 +94,11 @@
     		<artifactId>startbootstrap-sb-admin-2</artifactId>
     		<version>1.0.8-1</version>
 		</dependency>
+		<dependency>
+    		<groupId>org.webjars</groupId>
+    		<artifactId>datatables</artifactId>
+    		<version>1.10.12-1</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
