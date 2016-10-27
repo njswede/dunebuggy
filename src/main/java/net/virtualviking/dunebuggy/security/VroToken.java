@@ -1,4 +1,4 @@
-package net.virtualviking.dunebyggy.security;
+package net.virtualviking.dunebuggy.security;
 
 import java.io.IOException;
 import java.net.URISyntaxException;

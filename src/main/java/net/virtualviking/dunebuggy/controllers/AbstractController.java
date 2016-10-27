@@ -3,8 +3,8 @@ package net.virtualviking.dunebuggy.controllers;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import net.virtualviking.dunebuggy.security.VroToken;
 import net.virtualviking.dunebuggy.vro.VroClient;
-import net.virtualviking.dunebyggy.security.VroToken;
 
 public class AbstractController {
 

@@ -9,7 +9,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
-import net.virtualviking.dunebyggy.security.VroAuthenticationProvider;
+import net.virtualviking.dunebuggy.security.VroAuthenticationProvider;
 
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
